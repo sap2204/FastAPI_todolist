@@ -9,7 +9,7 @@ class BaseDAO:
     model = None
 
 
-    # Find by id
+    # Метод поиска в БД по id
     @classmethod
     async def find_by_id(cls, model_id: int):
         async with async_session_maker() as session:
@@ -18,7 +18,7 @@ class BaseDAO:
             return result.mappings().one_or_none()
         
 
-    # Find something one or None
+    # Метод поиска в БД что-то одного или ничего
     @classmethod
     async def find_one_or_none(cls, **filter_by):
         async with async_session_maker() as session:
@@ -27,7 +27,7 @@ class BaseDAO:
             return result.mappings().one_or_none()
         
 
-    # Find all dates
+    # Метод поиска всех значений по фильтру
     @classmethod
     async def find_all(cls, **filter_by):
         async with async_session_maker() as session:
@@ -36,7 +36,7 @@ class BaseDAO:
             return result.mappings().all()
         
 
-    # Method for adding new string to DB
+    # Метод добавления в БД
     @classmethod
     async def add(cls, **data):
         async with async_session_maker() as session:

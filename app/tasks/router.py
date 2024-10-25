@@ -18,12 +18,17 @@ router = APIRouter(
 async def add_task(task_data: STask, 
                    user: Users = Depends(get_current_user)): # task_data - это данные задачи, которые вводятся юзером 
                                      # и они должны соответствовать схеме Task
-    await TaskDAO.add(
-        user_id = user.id,
-        task = task_data.task,
-        task_date = task_data.task_date,
-        task_time = task_data.task_time
-        )
+    new_task = task_data.model_dump() # преобразование входных данных task_data (это схема Pydantic) в обычный словарь
+    new_task["user_id"] = user.id # добавляю к входным данным user_id номер авторизованного юзера, без этого не добавится запись в БД
+    await TaskDAO.add(**new_task) # распаковываю словарь, чтобы метод add мог принять любое количество позиционных аргументов
+
+    # Второй способ записи в БД
+    #await TaskDAO.add(
+        #user_id = user.id,
+        #task = task_data.task,
+        #task_date = task_data.task_date,
+        #task_time = task_data.task_time
+        #)
 
 
 
